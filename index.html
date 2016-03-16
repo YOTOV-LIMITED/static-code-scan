@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Static-code-scan by YOTOV-LIMITED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Static-code-scan</h1>
+      <h2 class="project-tagline">Run this quick static code scan on any URL to check for out-of-date libraries, layout issues and accessibility.</h2>
+      <a href="https://github.com/YOTOV-LIMITED/static-code-scan" class="btn">View on GitHub</a>
+      <a href="https://github.com/YOTOV-LIMITED/static-code-scan/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/YOTOV-LIMITED/static-code-scan/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="static-scan" class="anchor" href="#static-scan" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Static Scan</h1>
+
+<p>This tool analyzes the HTML, CSS, and JavaScript of a site or application for common coding issues.
+It warns about practices such as incomplete specification of CSS properties, invalid or incorrect
+doctypes, and obsolete versions of popular JavaScript libraries.</p>
+
+<p>It's easiest to use modern.IE by going to the <a href="http://modern.ie">modern.IE site</a> 
+and entering the URL to scan there. To customize the scan, or to use the scan
+to process files behind a firewall, you can clone and build the files from this repo
+and run the scan locally.</p>
+
+<h2>
+<a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How it works</h2>
+
+<p>The modern.IE local scan runs on a system behind your firewall; that system must have
+access to the internal web site or application that is to be scanned.
+Once the files have been analyzed, the analysis results are sent back to the modern.IE
+site to generate a complete formatted report that includes advice on remediating any issues.
+The report generation code and formatted pages from the modern.IE site are not included in this repo.</p>
+
+<p>Since the local scan generates JSON output, you can alternatively use it as a standalone scanner
+or incorporate it into a project's build process by processing the JSON with a local script.</p>
+
+<p>The main service for the scan is in the <code>app.js</code> file; it acts as an HTTP server.
+It loads the contents of the web page and calls the individual tests, located in <code>/lib/checks/</code>.
+Once all the checks have completed, it responds with a JSON object representing the results.</p>
+
+<h2>
+<a id="installation-and-configuration" class="anchor" href="#installation-and-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation and configuration</h2>
+
+<ul>
+<li>
+<a href="https://github.com/joyent/node/wiki/Installation">Install node.js</a>. You can use a <a href="https://github.com/joyent/node/wiki/Installation#installing-on-windows">pre-compiled Windows executable</a> if desired. Version 0.10 or higher is required.</li>
+<li>If you want to modify the code and submit revisions, <a href="http://git-scm.com/downloads">Install git</a>. You can choose <a href="http://windows.github.com/">GitHub for Windows</a> instead if you prefer. Then clone this repository. If you just want to run locally then downloading then you just need to download the latest version from <a href="https://github.com/InternetExplorer/modern.IE-static-code-scan/archive/master.zip">here</a> and unzip it</li>
+<li>Install dependencies. From the Modern.ie subdirectory, type: <code>npm install</code>
+</li>
+<li>If desired, set an environment variable <code>PORT</code> to define the port the service will listen on. By default the port number is 1337. The Windows command to set the port to 8181 would be: <code>set PORT=8181</code>
+</li>
+<li>Start the scan service: From the Modern.ie subdirectory, type: <code>node app.js</code> and the service should respond with a status message containing the port number it is using.</li>
+<li>Run a browser and go to the service's URL; assuming you are using the default port and are on the same computer, the URL would be: <code>http://localhost:1337/</code>
+</li>
+<li>Follow the instructions on the page.</li>
+</ul>
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>The project contains a set of unit tests in the <code>/test/</code> directory. To run the unit tests, type <code>grunt nodeunit</code>.</p>
+
+<h2>
+<a id="json-output" class="anchor" href="#json-output" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>JSON output</h2>
+
+<p>Once the scan completes, it produces a set of scan results in JSON format:</p>
+
+<div class="highlight highlight-source-js"><pre>{
+    <span class="pl-s"><span class="pl-pds">"</span>testName<span class="pl-pds">"</span></span> <span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">"</span>testName<span class="pl-pds">"</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Short description of the test<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>passed<span class="pl-pds">"</span></span> <span class="pl-k">:</span> <span class="pl-c1">true</span><span class="pl-k">/</span><span class="pl-c1">false</span>,
+        <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span><span class="pl-k">:</span> { <span class="pl-c">/* optional data describing the results found */</span> }
+    }
+}</pre></div>
+
+<p>The <code>data</code> property will vary depending on the test, but will generally provide further detail about any issues found.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/YOTOV-LIMITED/static-code-scan">Static-code-scan</a> is maintained by <a href="https://github.com/YOTOV-LIMITED">YOTOV-LIMITED</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
